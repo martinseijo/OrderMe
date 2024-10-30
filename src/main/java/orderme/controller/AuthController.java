@@ -22,7 +22,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request){
-        return ResponseEntity.ok(authService.login(request));
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.badRequest().body(new AuthResponseDto(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new AuthResponseDto("An unexpected error occurred"));
+        }
     }
 
     @PostMapping("/register")
