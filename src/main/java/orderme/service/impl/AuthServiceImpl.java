@@ -19,8 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 import static orderme.service.enums.Role.ROLE_USER;
 
 @Slf4j
@@ -65,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                     .password(passwordEncoder.encode(request.getPassword()))
                     .email(request.getEmail())
                     .phone(request.getPhone())
-                    .roles(Set.of(role))
+                    .role(role)
                     .enabled(true)
                     .build();
 

@@ -20,4 +20,10 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         return userMapper.usersToUserDtos(userRepository.findAll());
     }
+
+    @Override
+    public UserDto getUserByUserName(String username) {
+        return userMapper.userToUserDto(userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found")));
+    }
 }

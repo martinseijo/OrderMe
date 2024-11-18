@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class ProductDto {
 
-    private String username;
-    private String email;
-    private String phone;
-
+    private String name;
+    private String description;
+    private Double price;
 }

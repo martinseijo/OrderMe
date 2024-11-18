@@ -1,23 +1,27 @@
 package orderme.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "product_types")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
-public class Role implements Serializable {
+public class ProductType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
+
+    private String description;
 }
