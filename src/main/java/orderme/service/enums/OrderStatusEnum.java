@@ -1,12 +1,13 @@
 package orderme.service.enums;
-
-public enum Role {
-    ROLE_USER(1),
-    ROLE_ADMIN(2);
+public enum OrderStatusEnum {
+    PENDING(1),
+    IN_PROGRESS(2),
+    SERVED(3),
+    CANCELED(4);
 
     private final int id;
 
-    Role(int id) {
+    OrderStatusEnum(int id) {
         this.id = id;
     }
 

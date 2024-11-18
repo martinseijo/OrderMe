@@ -51,26 +51,26 @@ CREATE TABLE user_tables (
     PRIMARY KEY (user_id, table_id)
 );
 
--- Tabla de solicitudes (pedidos realizados por mesa)
-CREATE TABLE requests (
-    id SERIAL PRIMARY KEY,
-    table_id INT REFERENCES tables(id) ON DELETE SET NULL,
-    request_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    observations TEXT
-);
-
--- Tabla de pedidos (relacionada con solicitudes y productos)
-CREATE TABLE orders (
-    id SERIAL PRIMARY KEY,
-    request_id INT REFERENCES requests(id) ON DELETE cascade NOT NULL,
-    product_id INT REFERENCES products(id) ON DELETE SET NULL,
-    quantity INT NOT NULL CHECK (quantity > 0),
-    active BOOLEAN DEFAULT true
-);
-
 -- Tabla intermedia entre productos y usuarios
 CREATE TABLE user_products (
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     product_id INT REFERENCES products(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, product_id)
+);
+
+CREATE TABLE order_status (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT
+);
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    table_id INT REFERENCES tables(id) ON DELETE SET NULL,
+    product_id INT REFERENCES products(id) ON DELETE RESTRICT,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    observations TEXT,
+    request_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status_id INT REFERENCES order_status(id) NOT NULL,
+    CONSTRAINT unique_order_per_table UNIQUE (table_id, product_id, request_time)
 );

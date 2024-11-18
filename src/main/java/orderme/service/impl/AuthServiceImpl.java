@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static orderme.service.enums.Role.ROLE_USER;
+import static orderme.service.enums.RoleEnum.ROLE_USER;
 
 @Slf4j
 @Service
