@@ -48,9 +48,9 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public ResponseEntity<List<OrderDto>> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
         try {
-            OrderDto createdOrder = orderService.createOrder(orderRequestDto);
+            List<OrderDto> createdOrder = orderService.createOrder(orderRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

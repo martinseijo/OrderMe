@@ -9,5 +9,5 @@ public interface OrderService {
 
     List<OrderDto> getPedingOrdersByTable(Integer tableNumber);
     long countPendingOrdersByTable(Integer tableNumber);
-    OrderDto createOrder(OrderRequestDto orderRequestDto);
+    List<OrderDto> createOrder(OrderRequestDto orderRequestDto);
 }

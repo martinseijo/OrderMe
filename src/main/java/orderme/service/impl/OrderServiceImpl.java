@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,24 +46,52 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createOrder(OrderRequestDto orderRequestDto) {
-        Tables table = tablesRepository.findByNumber(orderRequestDto.getTableNumber())
+    public List<OrderDto> createOrder(OrderRequestDto orderRequestDto) {
+        Tables table = tablesRepository.findById(orderRequestDto.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("Table not found"));
-        Product product = productRepository.findById(orderRequestDto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
 
-        Order order = Order.builder()
-                .table(table)
-                .product(product)
-                .quantity(orderRequestDto.getQuantity())
-                .observations(orderRequestDto.getObservations())
-                .requestTime(LocalDateTime.now())
-                .status(orderStatus)
-                .build();
+        List<Order> orders = orderRequestDto.getProducts().entrySet().stream().map(entry -> {
+            Integer productId = entry.getKey();
+            Integer quantity = entry.getValue();
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        Order savedOrder = orderRepository.save(order);
-        return orderMapper.orderToOrderDto(savedOrder);
+            return Order.builder()
+                    .table(table)
+                    .product(product)
+                    .quantity(quantity)
+                    .observations(orderRequestDto.getObservations())
+                    .requestTime(LocalDateTime.now())
+                    .status(orderStatus)
+                    .build();
+        }).collect(Collectors.toList());
+
+        List<Order> savedOrders = orderRepository.saveAll(orders);
+        return orderMapper.ordersToOrderDtos(savedOrders);
     }
+
+//    @Override
+//    public OrderDto createOrder(OrderRequestDto orderRequestDto) {
+//        Tables table = tablesRepository.findByNumber(orderRequestDto.getTableNumber())
+//                .orElseThrow(() -> new EntityNotFoundException("Table not found"));
+//        Product product = productRepository.findById(orderRequestDto.getProductId())
+//                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+//        OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
+//                .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+//
+//        Order order = Order.builder()
+//                .table(table)
+//                .product(product)
+//                .quantity(orderRequestDto.getQuantity())
+//                .observations(orderRequestDto.getObservations())
+//                .requestTime(LocalDateTime.now())
+//                .status(orderStatus)
+//                .build();
+//
+//        Order savedOrder = orderRepository.save(order);
+//        return orderMapper.orderToOrderDto(savedOrder);
+//    }
 }
