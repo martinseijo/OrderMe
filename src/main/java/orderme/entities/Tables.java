@@ -1,10 +1,12 @@
 package orderme.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -30,18 +32,4 @@ public class Tables implements Serializable {
 
     @ManyToMany(mappedBy = "tables", fetch = FetchType.LAZY)
     private Set<User> users;
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, number); // Usa solo campos primitivos o no relacionados
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tables table = (Tables) o;
-        return Objects.equals(id, table.id) &&
-                Objects.equals(number, table.number);
-    }
 }

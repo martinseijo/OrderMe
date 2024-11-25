@@ -29,8 +29,8 @@ INSERT INTO orderme.tables (number, name, description) VALUES
 (1, 'Mesa Ventana', 'Mesa junto a la ventana con vista al exterior'),
 (2, NULL, 'Mesa cerca de la barra'),
 (3, 'Mesa Terraza', 'Mesa en la terraza al aire libre'),
-(4, NULL, NULL),
-(5, 'Mesa VIP', 'Mesa reservada en área privada');
+(1, NULL, NULL),
+(2, 'Mesa VIP', 'Mesa reservada en área privada');
 
 -- Insertar datos de prueba en la tabla user_products
 INSERT INTO orderme.user_products (user_id, product_id) VALUES
@@ -41,9 +41,8 @@ INSERT INTO orderme.user_products (user_id, product_id) VALUES
 (3, 5),  -- Usuario 3 (asociado al producto 5, Pulpo a la Gallega)
 (3, 6);  -- Usuario 3 (asociado al producto 6, Calamares a la Romana)
 
-INSERT INTO order_statuses (status_name) VALUES
+INSERT INTO order_status (name) VALUES
 ('PENDING'),
-('IN_PROGRESS'),
 ('SERVED'),
 ('CANCELED');
 
@@ -60,7 +59,7 @@ INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
 VALUES (4, 2, 4, NULL, 1);
 
 INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (5, 9, 2, 'Añadir picante', 4);
+VALUES (5, 9, 2, 'Añadir picante', 3);
 
 INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
 VALUES (6, 4, 1, 'Sin gluten', 2);
@@ -75,4 +74,10 @@ INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
 VALUES (9, 10, 2, 'Extra salsa', 2);
 
 INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (10, 1, 1, 'Sin lactosa', 4);
+VALUES (10, 1, 1, 'Sin lactosa', 3);
+
+INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 1);
+INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 2);
+INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 3);
+INSERT INTO orderme.user_tables (user_id, table_id) VALUES(2, 4);
+INSERT INTO orderme.user_tables (user_id, table_id) VALUES(2, 5);

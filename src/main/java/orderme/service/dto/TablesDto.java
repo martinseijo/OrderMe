@@ -6,4 +6,5 @@ import lombok.Data;
 public class TablesDto {
 
     private Integer number;
+    private String name;
 }

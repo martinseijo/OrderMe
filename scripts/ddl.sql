@@ -39,7 +39,7 @@ CREATE TABLE products (
 -- Tabla de mesas
 CREATE TABLE tables (
     id SERIAL PRIMARY KEY,
-    number INT NOT NULL UNIQUE,
+    number INT NOT NULL,
     name VARCHAR(50),
     description TEXT
 );

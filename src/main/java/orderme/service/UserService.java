@@ -10,4 +10,5 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
     UserDto getUserByUserName(String username);
+    String getAuthenticatedUsername();
 }
