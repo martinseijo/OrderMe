@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +43,21 @@ public class OrderServiceImpl implements OrderService {
         Tables table = tablesRepository.findByUserIdAndTableNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName()).orElseThrow(() -> new EntityNotFoundException("Order status not found"));
         return orderRepository.countByTableAndStatus(table, orderStatus);
+    }
+
+    @Override
+    public Map<Integer, Long> countPendingOrdersByUserTables() {
+        User user = userRepository.findByUsername(userService.getAuthenticatedUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+
+        return user.getTables().stream()
+                .collect(Collectors.toMap(
+                        Tables::getNumber,
+                        table -> orderRepository.countByTableAndStatus(table, orderStatus)
+                ));
     }
 
     @Override
