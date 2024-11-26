@@ -8,6 +8,7 @@ import orderme.service.OrderService;
 import orderme.service.UserService;
 import orderme.service.dto.OrderDto;
 import orderme.service.dto.OrderRequestDto;
+import orderme.service.dto.OrderUpdateDto;
 import orderme.service.enums.OrderStatusEnum;
 import orderme.service.mapper.OrderMapper;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void changeStatus(OrderUpdateDto orderUpdateDto) {
+        Order order = orderRepository.findById(orderUpdateDto.getOrderId())
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+
+        OrderStatus orderStatus = orderStatusRepository.findByName(orderUpdateDto.getStatus())
+                .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+
+        order.setStatus(orderStatus);
+        orderRepository.save(order);
+    }
+
+    @Override
     public List<OrderDto> createOrder(OrderRequestDto orderRequestDto) {
         Tables table = tablesRepository.findById(orderRequestDto.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("Table not found"));
@@ -68,17 +81,15 @@ public class OrderServiceImpl implements OrderService {
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
 
-        List<Order> orders = orderRequestDto.getProducts().entrySet().stream().map(entry -> {
-            Integer productId = entry.getKey();
-            Integer quantity = entry.getValue();
-            Product product = productRepository.findById(productId)
+        List<Order> orders = orderRequestDto.getProducts().stream().map(productOrderDto -> {
+            Product product = productRepository.findById(productOrderDto.getProductId())
                     .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
             return Order.builder()
                     .table(table)
                     .product(product)
-                    .quantity(quantity)
-                    .observations(orderRequestDto.getObservations())
+                    .quantity(productOrderDto.getQuantity())
+                    .observations(productOrderDto.getObservations())
                     .requestTime(LocalDateTime.now())
                     .status(orderStatus)
                     .build();

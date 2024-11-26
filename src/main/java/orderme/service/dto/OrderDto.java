@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class OrderDto {
 
+    private Integer id;
     private TablesDto table;
     private ProductDto product;
     private Integer quantity;

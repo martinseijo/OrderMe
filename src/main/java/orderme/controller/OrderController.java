@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import orderme.service.OrderService;
 import orderme.service.dto.OrderDto;
 import orderme.service.dto.OrderRequestDto;
+import orderme.service.dto.OrderUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +68,18 @@ public class OrderController {
         try {
             List<OrderDto> createdOrder = orderService.createOrder(orderRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Void> changeStatus(@RequestBody OrderUpdateDto orderUpdateDto) {
+        try {
+            orderService.changeStatus(orderUpdateDto);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
