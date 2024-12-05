@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "tables")
@@ -30,6 +29,7 @@ public class Tables implements Serializable {
     @Column(nullable = true)
     private String description;
 
-    @ManyToMany(mappedBy = "tables", fetch = FetchType.LAZY)
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

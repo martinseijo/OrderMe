@@ -6,9 +6,7 @@ import orderme.service.TableService;
 import orderme.service.dto.TablesDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +29,42 @@ public class TablesController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<TablesDto> createTable(@RequestBody TablesDto tablesDto) {
+        try {
+            TablesDto createdTable = tableService.createTable(tablesDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdTable);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/update/{tableId}")
+    public ResponseEntity<TablesDto> updateTable(@PathVariable Integer tableId, @RequestBody TablesDto tablesDto) {
+        try {
+            TablesDto updatedTable = tableService.updateTable(tableId, tablesDto);
+            return ResponseEntity.ok(updatedTable);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/delete/{tableId}")
+    public ResponseEntity<Void> deleteTable(@PathVariable Integer tableId) {
+        try {
+            tableService.deleteTable(tableId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

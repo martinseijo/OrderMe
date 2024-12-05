@@ -11,40 +11,32 @@ INSERT INTO orderme.product_types (name, description) VALUES
 ('Postres', 'Dulces para terminar la comida'),
 ('Bebidas', 'Refrescos, cervezas, vinos, y más');
 
--- Insertar datos en la tabla orderme.products
-INSERT INTO orderme.products (name, description, price, product_type_id) VALUES
-('Pan con tomate', 'Pan tostado con tomate fresco y aceite de oliva', 3.50, 1),
-('Ensalada César', 'Lechuga, pollo, queso parmesano y salsa César', 7.00, 1),
-('Tortilla Española', 'Tortilla con patatas y cebolla', 4.00, 2),
-('Croquetas de Jamón', 'Croquetas caseras rellenas de jamón', 6.00, 2),
-('Pulpo a la Gallega', 'Pulpo cocido con pimentón, aceite y sal', 12.00, 3),
-('Calamares a la Romana', 'Calamares rebozados y fritos', 10.00, 3),
-('Tarta de Queso', 'Tarta casera de queso con base de galleta', 5.00, 4),
-('Helado de Vainilla', 'Helado artesano de vainilla', 3.50, 4),
-('Coca Cola', 'Refresco clásico de cola', 2.50, 5),
-('Cerveza Artesanal', 'Cerveza local de producción artesanal', 4.00, 5); -- Bebidas
+-- Insertar productos (relacionados con un tipo de producto y un usuario)
+INSERT INTO products (name, description, price, product_type_id, user_id) VALUES
+('Pan con tomate', 'Pan tostado con tomate fresco y aceite de oliva', 3.50, 1, 1),
+('Ensalada César', 'Lechuga, pollo, queso parmesano y salsa César', 7.00, 1, 1),
+('Tortilla Española', 'Tortilla con patatas y cebolla', 4.00, 2, 1),
+('Croquetas de Jamón', 'Croquetas caseras rellenas de jamón', 6.00, 2, 1),
+('Pulpo a la Gallega', 'Pulpo cocido con pimentón, aceite y sal', 12.00, 3, 1),
+('Calamares a la Romana', 'Calamares rebozados y fritos', 10.00, 3, 1),
+('Tarta de Queso', 'Tarta casera de queso con base de galleta', 5.00, 4, 1),
+('Helado de Vainilla', 'Helado artesano de vainilla', 3.50, 4, 1),
+('Coca Cola', 'Refresco clásico de cola', 2.50, 5, 1),
+('Cerveza Artesanal', 'Cerveza local de producción artesanal', 4.00, 5, 1);
 
--- Insertar datos en la tabla orderme.tables
-INSERT INTO orderme.tables (number, name, description) VALUES
-(1, 'Mesa Ventana', 'Mesa junto a la ventana con vista al exterior'),
-(2, NULL, 'Mesa cerca de la barra'),
-(3, 'Mesa Terraza', 'Mesa en la terraza al aire libre'),
-(1, NULL, NULL),
-(2, 'Mesa VIP', 'Mesa reservada en área privada');
-
--- Insertar datos de prueba en la tabla user_products
-INSERT INTO orderme.user_products (user_id, product_id) VALUES
-(1, 1),  -- Usuario 1 (asociado al producto 1, por ejemplo, Pan con tomate)
-(1, 2),  -- Usuario 1 (asociado al producto 2, Ensalada César)
-(2, 3),  -- Usuario 2 (asociado al producto 3, Tortilla Española)
-(2, 4),  -- Usuario 2 (asociado al producto 4, Croquetas de Jamón)
-(3, 5),  -- Usuario 3 (asociado al producto 5, Pulpo a la Gallega)
-(3, 6);  -- Usuario 3 (asociado al producto 6, Calamares a la Romana)
+-- Insertar mesas asociadas a usuarios
+INSERT INTO tables (number, name, description, user_id) VALUES
+(1, 'Mesa Ventana', 'Mesa junto a la ventana con vista al exterior', 1),
+(2, NULL, 'Mesa cerca de la barra', 1),
+(3, 'Mesa Terraza', 'Mesa en la terraza al aire libre', 1),
+(4, NULL, NULL, 2),
+(5, 'Mesa VIP', 'Mesa reservada en área privada', 2);  -- Usuario 3 (asociado al producto 6, Calamares a la Romana)
 
 INSERT INTO order_status (name) VALUES
 ('PENDING'),
 ('SERVED'),
-('CANCELED');
+('CANCELED'),
+('PAID');
 
 INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
 VALUES (1, 5, 2, 'Sin cebolla', 1);
@@ -60,24 +52,3 @@ VALUES (4, 2, 4, NULL, 1);
 
 INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
 VALUES (5, 9, 2, 'Añadir picante', 3);
-
-INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (6, 4, 1, 'Sin gluten', 2);
-
-INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (7, 8, 5, 'Poco hecho', 3);
-
-INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (8, 6, 3, NULL, 1);
-
-INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (9, 10, 2, 'Extra salsa', 2);
-
-INSERT INTO orders (table_id, product_id, quantity, observations, status_id)
-VALUES (10, 1, 1, 'Sin lactosa', 3);
-
-INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 1);
-INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 2);
-INSERT INTO orderme.user_tables (user_id, table_id) VALUES(1, 3);
-INSERT INTO orderme.user_tables (user_id, table_id) VALUES(2, 4);
-INSERT INTO orderme.user_tables (user_id, table_id) VALUES(2, 5);

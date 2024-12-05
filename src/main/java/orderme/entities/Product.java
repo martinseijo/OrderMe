@@ -1,11 +1,13 @@
 package orderme.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -31,6 +33,7 @@ public class Product implements Serializable {
     @JoinColumn(name = "product_type_id", referencedColumnName = "id")
     private ProductType productType;
 
-    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

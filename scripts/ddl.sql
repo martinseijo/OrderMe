@@ -33,7 +33,9 @@ CREATE TABLE products (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
-    product_type_id INT REFERENCES product_types(id) ON DELETE SET NULL
+    product_type_id INT REFERENCES product_types(id) ON DELETE SET NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Tabla de mesas
@@ -41,21 +43,10 @@ CREATE TABLE tables (
     id SERIAL PRIMARY KEY,
     number INT NOT NULL,
     name VARCHAR(50),
-    description TEXT
-);
-
--- Relación N:M entre usuarios y mesas (gestores asignados a mesas)
-CREATE TABLE user_tables (
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    table_id INT REFERENCES tables(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, table_id)
-);
-
--- Tabla intermedia entre productos y usuarios
-CREATE TABLE user_products (
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    product_id INT REFERENCES products(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, product_id)
+    description TEXT,
+    user_id INT NOT NULL,
+    CONSTRAINT unique_table_number_per_restaurant UNIQUE (number, user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE order_status (

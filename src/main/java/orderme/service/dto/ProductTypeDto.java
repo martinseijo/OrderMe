@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductTypeDto {
 
+    private Integer id;
     private String name;
-
     private String description;
 }

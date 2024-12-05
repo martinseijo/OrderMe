@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getPedingOrdersByTable(Integer tableNumber) {
         User user = userRepository.findByUsername(userService.getAuthenticatedUsername()).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Tables table = tablesRepository.findByUserIdAndTableNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
+        Tables table = tablesRepository.findByUserIdAndNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName()).orElseThrow(() -> new EntityNotFoundException("Order status not found"));
         return orderMapper.ordersToOrderDtos(orderRepository.findByTableAndStatus(table, orderStatus));
     }
@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public long countPendingOrdersByTable(Integer tableNumber) {
         User user = userRepository.findByUsername(userService.getAuthenticatedUsername()).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Tables table = tablesRepository.findByUserIdAndTableNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
+        Tables table = tablesRepository.findByUserIdAndNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName()).orElseThrow(() -> new EntityNotFoundException("Order status not found"));
         return orderRepository.countByTableAndStatus(table, orderStatus);
     }
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
 
-        return user.getTables().stream()
+        return tablesRepository.findByUser(user).stream()
                 .collect(Collectors.toMap(
                         Tables::getNumber,
                         table -> orderRepository.countByTableAndStatus(table, orderStatus)
