@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(nullable = true)
     private String phone;
 
-    @Column(nullable = true)
+    @Column()
     private boolean enabled;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -36,4 +36,7 @@ public class Product implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean enabled;
 }

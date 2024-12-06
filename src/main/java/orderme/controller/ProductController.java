@@ -20,10 +20,24 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping()
+    @PostMapping("/public")
     public ResponseEntity<List<ProductDto>> findAll(@RequestBody PublicRequestDto request){
         try {
             List<ProductDto> response = productService.getProductsByUserName(request);
+            return ResponseEntity.ok(response);
+        }catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.emptyList());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ProductDto>> findAllByUser(){
+        try {
+            List<ProductDto> response = productService.getProductsByUser();
             return ResponseEntity.ok(response);
         }catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

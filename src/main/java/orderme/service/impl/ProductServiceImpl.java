@@ -39,7 +39,14 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProductsByUserName(PublicRequestDto request) {
 
         final User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return productMapper.productsToProductDtos(productRepository.findByUser(user).stream().toList());
+        return productMapper.productsToProductDtos(productRepository.findByUserAndEnabledTrue(user).stream().toList());
+    }
+
+    @Override
+    public List<ProductDto> getProductsByUser() {
+        User user = userRepository.findByUsername(userService.getAuthenticatedUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return productMapper.productsToProductDtos(productRepository.findByUserAndEnabledTrue(user).stream().toList());
     }
 
     @Override
@@ -50,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
         ProductType productType = productTypeRepository.getReferenceById(productDto.getProductType().getId());
         product.setProductType(productType);
         product.setUser(user);
+        product.setEnabled(true);
         Product savedProduct = productRepository.save(product);
         return productMapper.productToProductDto(savedProduct);
     }
@@ -71,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Integer productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        productRepository.delete(product);
+        product.setEnabled(false);
+        productRepository.save(product);
     }
 }

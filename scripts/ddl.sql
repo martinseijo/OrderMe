@@ -35,6 +35,7 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
     product_type_id INT REFERENCES product_types(id) ON DELETE SET NULL,
     user_id INT NOT NULL,
+    enabled BOOLEAN DEFAULT true,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 

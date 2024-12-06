@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByUser(User user);
+    List<Product> findByUserAndEnabledTrue(User user);
 }
