@@ -41,7 +41,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Aplica a todas las rutas
-                .allowedOrigins("http://localhost:5173", "http://192.168.1.138:5173", "https://orderme-puce.vercel.app")// Origen de la aplicación React
+                .allowedOrigins("http://localhost:5173", "http://192.168.1.138:5173", "https://orderme-frontend.onrender.com")// Origen de la aplicación React
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Métodos permitidos
                 .allowedHeaders("*") // Permitir todos los encabezados
                 .allowCredentials(true); // Permite cookies y encabezados de autorización
