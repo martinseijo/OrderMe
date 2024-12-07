@@ -1,27 +1,23 @@
-# Usar una imagen oficial de Maven para compilar el proyecto
+# Etapa de construcción
 FROM maven:3.8.5-openjdk-17 AS build
-
-# Establecer el directorio de trabajo para la compilación
 WORKDIR /app
 
-# Copiar los archivos de configuración y código fuente
+# Copiar archivos del proyecto
 COPY pom.xml .
 COPY src ./src
 
-# Construir el archivo JAR
+# Construir el proyecto
 RUN mvn clean package -DskipTests
 
-# Usar una imagen oficial de Java para ejecutar la aplicación
+# Etapa de ejecución
 FROM openjdk:17-jdk-slim
-
-# Establecer el directorio de trabajo para la ejecución
 WORKDIR /app
 
-# Copiar el JAR compilado desde la fase de construcción
+# Copiar el JAR construido desde la etapa de construcción
 COPY --from=build /app/target/*.jar app.jar
 
 # Exponer el puerto 8080
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
+# Comando para ejecutar el JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
