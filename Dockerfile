@@ -24,5 +24,5 @@ COPY --from=builder /app/target/*.jar app.jar
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando para ejecutar la aplicación con el perfil prod
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]

@@ -1,13 +1,16 @@
 spring:
   profiles:
     active: prod
+
+---
+spring:
   config:
     activate:
       on-profile: prod
   datasource:
     url: jdbc:postgresql://dpg-cta1gnt6l47c73bgeki0-a.frankfurt-postgres.render.com:5432/orderme
-    username: ${DB_USER:${systemProperties.DB_USER}}
-    password: ${DB_PASSWORD:${systemProperties.DB_PASSWORD}}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
