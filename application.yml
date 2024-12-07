@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderme?currentSchema=orderme
+    username: ${DB_USER:${systemProperties.DB_USER}}
+    password: ${DB_PASSWORD:${systemProperties.DB_PASSWORD}}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate.default_schema: orderme
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
