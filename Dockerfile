@@ -19,7 +19,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copia el JAR compilado desde la fase de build
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/target/orderme-0.0.1-SNAPSHOT.jar app.jar
+
+# Copia el archivo .env al contenedor
+COPY .env .env
 
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8080

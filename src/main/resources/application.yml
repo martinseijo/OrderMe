@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-cta1gnt6l47c73bgeki0-a.frankfurt-postgres.render.com:5432/orderme
+    username: ${DB_USER:default_user}
+    password: ${DB_PASSWORD:default_password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate.default_schema: orderme
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  logging:
+    level:
+      org.springframework: DEBUG
