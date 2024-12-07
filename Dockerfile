@@ -1,23 +1,28 @@
-# Etapa de construcción
-FROM maven:3.8.5-openjdk-17 AS build
+# Usa la imagen oficial de Maven para construir la aplicación
+FROM maven:3.8.5-openjdk-17 AS builder
+
+# Establece el directorio de trabajo para el build
 WORKDIR /app
 
-# Copiar archivos del proyecto
+# Copia el archivo pom.xml y descarga las dependencias del proyecto
 COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copia el código fuente y compila el proyecto
 COPY src ./src
+RUN mvn package -DskipTests
 
-# Construir el proyecto
-RUN mvn clean package -DskipTests
-
-# Etapa de ejecución
+# Usa la imagen oficial de OpenJDK para ejecutar la aplicación
 FROM openjdk:17-jdk-slim
+
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar el JAR construido desde la etapa de construcción
-COPY --from=build /app/target/*.jar app.jar
+# Copia el JAR compilado desde la fase de build
+COPY --from=builder /app/target/*.jar app.jar
 
-# Exponer el puerto 8080
+# Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8080
 
-# Comando para ejecutar el JAR
+# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
