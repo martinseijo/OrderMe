@@ -39,6 +39,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDto> getServedOrdersByTable(String username, Integer tableNumber) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Tables table = tablesRepository.findByUserIdAndNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
+        OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.SERVED.getName()).orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+        return orderMapper.ordersToOrderDtos(orderRepository.findByTableAndStatus(table, orderStatus));
+    }
+
+    @Override
     public long countPendingOrdersByTable(Integer tableNumber) {
         User user = userRepository.findByUsername(userService.getAuthenticatedUsername()).orElseThrow(() -> new EntityNotFoundException("User not found"));
         Tables table = tablesRepository.findByUserIdAndNumber(user.getId(), tableNumber).orElseThrow(() -> new EntityNotFoundException("Table not found"));
@@ -71,6 +79,16 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(orderStatus);
         orderRepository.save(order);
+    }
+
+    @Override
+    public void changeToPaid(List<Integer> ordersToPaid) {
+        List<Order> orders = orderRepository.findAllById(ordersToPaid);
+        OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PAID.getName())
+                .orElseThrow(() -> new EntityNotFoundException("Order status not found"));
+
+        orders.forEach(order -> order.setStatus(orderStatus));
+        orderRepository.saveAll(orders);
     }
 
     @Override

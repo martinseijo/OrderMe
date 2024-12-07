@@ -1,9 +1,9 @@
 package orderme.service.enums;
 public enum OrderStatusEnum {
     PENDING(1),
-    IN_PROGRESS(2),
-    SERVED(3),
-    CANCELED(4);
+    SERVED(2),
+    CANCELED(3),
+    PAID(4);
 
     private final int id;
 

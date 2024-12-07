@@ -49,6 +49,20 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/served/{userName}/{tableNumber}")
+    public ResponseEntity<List<OrderDto>> servedOrdersByTable(@PathVariable String userName, @PathVariable Integer tableNumber) {
+        try {
+            List<OrderDto> response = orderService.getServedOrdersByTable(userName, tableNumber);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.emptyList());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
     @GetMapping("/pending/count")
     public ResponseEntity<Map<Integer, Long>> countPendingOrdersByUserTables() {
         try {
@@ -79,6 +93,18 @@ public class OrderController {
     public ResponseEntity<Void> changeStatus(@RequestBody OrderUpdateDto orderUpdateDto) {
         try {
             orderService.changeStatus(orderUpdateDto);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/public/paid")
+    public ResponseEntity<Void> publicPaid(@RequestBody List<Integer> ordersToPaid) {
+        try {
+            orderService.changeToPaid(ordersToPaid);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
