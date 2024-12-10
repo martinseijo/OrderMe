@@ -93,7 +93,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> createOrder(OrderRequestDto orderRequestDto) {
-        Tables table = tablesRepository.findById(orderRequestDto.getTableId())
+        User user = userRepository.findByUsername(orderRequestDto.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Tables table = tablesRepository.findByUserIdAndNumber(user.getId(), orderRequestDto.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("Table not found"));
 
         OrderStatus orderStatus = orderStatusRepository.findByName(OrderStatusEnum.PENDING.getName())
